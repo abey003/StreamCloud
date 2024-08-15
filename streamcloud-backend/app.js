@@ -112,6 +112,15 @@ app.get('/movies/genres', async (req, res) => {
     }
 });
 
+app.get('/genre/:genre', async (req, res) => {
+    try {
+      const movies = await Movie.find({ genre: req.params.genre });
+      res.json(movies);
+    } catch (error) {
+      res.status(500).json({ message: 'Server error' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);
 });
