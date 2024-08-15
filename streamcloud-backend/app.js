@@ -22,13 +22,13 @@ require('./connections/connection');
 // });
 
 // Get the top 4 recently added movies
-app.get('/movies/recent', async (req, res) => {
+app.get('/', async (req, res) => {
     try {
-      // Fetch recent movies from database
-      const movies = await Movie.find().sort({ movieUploadedOn: -1 }).limit(4);
-      res.json(movies);
+        const movies = await movieModel.find().sort({ movieUploadedOn: -1 }).limit(4);
+        res.json(movies);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching movies', error });
+        console.error("Error fetching movies:", error); // Log the error to the console
+        res.status(500).json({ message: 'Error fetching movies', error });
     }
 });
 
