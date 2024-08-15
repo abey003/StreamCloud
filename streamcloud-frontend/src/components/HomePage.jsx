@@ -216,7 +216,7 @@ const HomePage = () => {
                           opacity: 0,
                           transform: 'translateY(100%)',
                           transition: 'opacity 0.3s, transform 0.3s',
-                          zIndex: 2
+                          zIndex: 2,
                         }}
                         className="card-buttons"
                       >
