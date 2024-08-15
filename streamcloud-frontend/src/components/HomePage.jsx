@@ -36,10 +36,6 @@ const HomePage = () => {
     navigate('/watchnow', { state: { movie } });
   };
 
-  const viewAllMovies = () => {
-    navigate('/all-movies');
-  };
-
   const viewMoviesByGenre = (genre) => {
     navigate(`/movies/genre/${genre}`);
   };
@@ -166,9 +162,6 @@ const HomePage = () => {
                 </Grid>
               ))}
             </Grid>
-            <Button variant="outlined" sx={{ marginTop: '20px' }} onClick={viewAllMovies}>
-              View All Movies
-            </Button>
           </Box>
 
           {Object.keys(moviesByGenre).map((genre) => (
