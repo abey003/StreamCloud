@@ -87,14 +87,28 @@ app.get('/movies/after/:date', async (req, res) => {
     }
 });
 
-// Filter movies by genre and get the top 4 most recent
-app.get('/movies/genre/:genre', async (req, res) => {
+// Fetch all movies by genre and group them
+app.get('/movies/genres', async (req, res) => {
     try {
-        const genre = req.params.genre;
-        const movies = await movieModel.find({ genre: genre }).sort({ movieUploadedOn: -1 }).limit(4);
-        res.json(movies);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+        const genres = [
+            'action', 'adventure', 'sci-fi', 'comedy', 'horror', 
+            'animation', 'biography', 'documentary', 'romance', 
+            'fantasy', 'thriller', 'crime'
+        ];
+
+        const moviesByGenre = {};
+
+        for (const genre of genres) {
+            const movies = await movieModel.find({ genre }).sort({ movieUploadedOn: -1 }).limit(4);
+            if (movies.length > 0) {
+                moviesByGenre[genre] = movies;
+            }
+        }
+
+        res.json(moviesByGenre);
+    } catch (error) {
+        console.error("Error fetching movies by genres:", error); // Log the error to the console
+        res.status(500).json({ message: 'Error fetching movies by genres', error });
     }
 });
 
