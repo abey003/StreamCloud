@@ -88,7 +88,7 @@ app.get('/movies/genre/:genre', async (req, res) => {
 });
 
 // Get the top 4 recently added movies
-app.get('/', async (req, res) => {
+app.get('/movies/recent', async (req, res) => {
     try {
       // Fetch recent movies from database
       const movies = await Movie.find().sort({ movieUploadedOn: -1 }).limit(4);
