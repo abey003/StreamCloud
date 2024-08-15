@@ -13,7 +13,7 @@ const WatchNowPage = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, paddingTop: '64px' }}>
       <Button 
         variant="contained" 
         onClick={handleBackClick} 
