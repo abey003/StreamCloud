@@ -95,7 +95,7 @@ const HomePage = () => {
               Recently Added Movies
             </Typography>
             <Grid container spacing={2}>
-              {movies.slice(0, 5).map((movie) => (
+              {movies.slice(0, 4).map((movie) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={movie._id}>
                   <Card
                     sx={{
