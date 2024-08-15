@@ -21,6 +21,17 @@ require('./connections/connection');
 //     }
 // });
 
+// Get the top 4 recently added movies
+app.get('/movies/recent', async (req, res) => {
+    try {
+      // Fetch recent movies from database
+      const movies = await Movie.find().sort({ movieUploadedOn: -1 }).limit(4);
+      res.json(movies);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching movies', error });
+    }
+});
+
 // Add a new movie
 app.post('/addmovie', async (req, res) => {
     try {
@@ -86,17 +97,6 @@ app.get('/movies/genre/:genre', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
-// Get the top 4 recently added movies
-app.get('/movies/recent', async (req, res) => {
-    try {
-      // Fetch recent movies from database
-      const movies = await Movie.find().sort({ movieUploadedOn: -1 }).limit(4);
-      res.json(movies);
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching movies', error });
-    }
-  });
 
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);
