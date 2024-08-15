@@ -10,7 +10,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://streamcloud-lt16.onrender.com/")
+    axios.get("https://streamcloud-lt16.onrender.com/movies/recent")
       .then((res) => {
         const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
         setMovies(sortedMovies);
@@ -34,6 +34,14 @@ const HomePage = () => {
 
   const watchNow = (movie) => {
     navigate('/watchnow', { state: { movie } });
+  };
+
+  const viewAllMovies = () => {
+    navigate('/all-movies');
+  };
+
+  const viewMoviesByGenre = (genre) => {
+    navigate(`/movies/genre/${genre}`);
   };
 
   const mostRecentMovie = movies.length > 0 ? movies[0] : null;
@@ -121,22 +129,6 @@ const HomePage = () => {
                       image={movie.moviePosterURL}
                       alt={movie.movieName}
                     />
-                    {/* <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: '1px',  // Adjusted to move the title higher
-                        left: 0,
-                        width: '100%',
-                        padding: '10px',
-                        color: 'white',
-                        textAlign: 'left',
-                        zIndex: 1,
-                      }}
-                    >
-                      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                        {movie.movieName}
-                      </Typography>
-                    </Box> */}
                     <Box
                       sx={{
                         position: 'absolute',
@@ -174,15 +166,18 @@ const HomePage = () => {
                 </Grid>
               ))}
             </Grid>
+            <Button variant="outlined" sx={{ marginTop: '20px' }} onClick={viewAllMovies}>
+              View All Movies
+            </Button>
           </Box>
 
           {Object.keys(moviesByGenre).map((genre) => (
             <Box key={genre} sx={{ padding: '20px', zIndex: 2 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px', cursor: 'pointer' }} onClick={() => viewMoviesByGenre(genre)}>
                 {genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
               </Typography>
               <Grid container spacing={2}>
-                {moviesByGenre[genre].map((movie) => (
+                {moviesByGenre[genre].slice(0, 4).map((movie) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={movie._id}>
                     <Card
                       sx={{
@@ -208,22 +203,6 @@ const HomePage = () => {
                         image={movie.moviePosterURL}
                         alt={movie.movieName}
                       />
-                      {/* <Box
-                        sx={{
-                          position: 'absolute',
-                          bottom: '1px',  // Adjusted to move the title higher
-                          left: 0,
-                          width: '100%',
-                          padding: '10px',
-                          color: 'white',
-                          textAlign: 'left',
-                          zIndex: 1,
-                        }}
-                      >
-                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                          {movie.movieName}
-                        </Typography>
-                      </Box> */}
                       <Box
                         sx={{
                           position: 'absolute',

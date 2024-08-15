@@ -11,18 +11,18 @@ app.use(express.json());
 
 require('./connections/connection');
 
-// // Fetch all movies
-// app.get('/', async (req, res) => {
-//     try {
-//         const data = await movieModel.find();
-//         res.send(data);
-//     } catch (error) {
-//         res.send("Error in getting data");
-//     }
-// });
+// Fetch all movies
+app.get('/', async (req, res) => {
+    try {
+        const data = await movieModel.find();
+        res.send(data);
+    } catch (error) {
+        res.send("Error in getting data");
+    }
+});
 
 // Get the top 4 recently added movies
-app.get('/', async (req, res) => {
+app.get('/movies/recent', async (req, res) => {
     try {
         const movies = await movieModel.find().sort({ movieUploadedOn: -1 }).limit(4);
         res.json(movies);
