@@ -10,7 +10,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://streamcloud-7oa0.onrender.com/movies/recent")
+    axios.get("https://streamcloud-7oa0.onrender.com/")
       .then((res) => {
         const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
         setMovies(sortedMovies);
