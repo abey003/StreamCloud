@@ -7,19 +7,32 @@ const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPosterIndex, setCurrentPosterIndex] = useState(0);
+  const [moviesByGenre, setMoviesByGenre] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://streamcloud-lt16.onrender.com/movies/recent")
-      .then((res) => {
-        const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
-        setMovies(sortedMovies);
+    const fetchMovies = async () => {
+      const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent");
+      const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
+      setMovies(sortedMovies);
+    };
+
+    const fetchMoviesByGenre = async () => {
+      const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/genres");
+      setMoviesByGenre(res.data);
+    };
+
+    const fetchData = async () => {
+      try {
+        await Promise.all([fetchMovies(), fetchMoviesByGenre()]);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -41,14 +54,6 @@ const HomePage = () => {
   };
 
   const mostRecentMovie = movies.length > 0 ? movies[0] : null;
-
-  const moviesByGenre = movies.reduce((acc, movie) => {
-    if (movie.genre) {
-      if (!acc[movie.genre]) acc[movie.genre] = [];
-      acc[movie.genre].push(movie);
-    }
-    return acc;
-  }, {});
 
   return (
     <div>
