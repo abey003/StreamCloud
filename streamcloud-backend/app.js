@@ -76,26 +76,27 @@ app.get('/movies/after/:date', async (req, res) => {
     }
 });
 
-// Filter movies by genre
+// Filter movies by genre and get the top 4 most recent
 app.get('/movies/genre/:genre', async (req, res) => {
     try {
         const genre = req.params.genre;
-        const movies = await movieModel.find({ genre: genre });
+        const movies = await movieModel.find({ genre: genre }).sort({ movieUploadedOn: -1 }).limit(4);
         res.json(movies);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
-// Get the top 5 recently added movies
+// Get the top 4 recently added movies
 app.get('/movies/recent', async (req, res) => {
     try {
-        const recentMovies = await movieModel.find().sort({ movieUploadedOn: -1 }).limit(5);
-        res.json(recentMovies);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+      // Fetch recent movies from database
+      const movies = await Movie.find().sort({ movieUploadedOn: -1 }).limit(4);
+      res.json(movies);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching movies', error });
     }
-});
+  });
 
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);

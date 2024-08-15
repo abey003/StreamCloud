@@ -10,9 +10,10 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://streamcloud-7oa0.onrender.com/")
+    axios.get("https://streamcloud-7oa0.onrender.com/movies/recent")
       .then((res) => {
-        setMovies(res.data);
+        const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
+        setMovies(sortedMovies);
         setLoading(false);
       })
       .catch((error) => {
@@ -24,7 +25,7 @@ const HomePage = () => {
   useEffect(() => {
     if (movies.length > 0) {
       const interval = setInterval(() => {
-        setCurrentPosterIndex((prevIndex) => (prevIndex + 1) % movies.slice(0, 5).length);
+        setCurrentPosterIndex((prevIndex) => (prevIndex + 1) % Math.min(movies.length, 5));
       }, 5000); // Change background and title every 5 seconds
 
       return () => clearInterval(interval);
@@ -54,47 +55,38 @@ const HomePage = () => {
       ) : (
         <>
           {mostRecentMovie && (
-            <Box sx={{ position: 'relative', height: '80vh', marginTop: '64px', overflow: 'hidden' }}>
-              {movies.slice(0, 5).map((movie, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    background: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent), url(${movie.moviePosterURL}) center/cover no-repeat`,
-                    transition: 'opacity 1s ease-in-out',
-                    opacity: index === currentPosterIndex ? 1 : 0,
-                    zIndex: index === currentPosterIndex ? 1 : 0,
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: 'linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0))',
-                      zIndex: 2,
-                    },
-                  }}
-                />
-              ))}
-              <Box
-                sx={{
+            <Box
+              sx={{
+                height: '80vh',
+                marginTop: '64px',
+                position: 'relative',
+                backgroundImage: `url(${movies.slice(0, 5)[currentPosterIndex].moviePosterURL})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+                display: 'flex',
+                alignItems: 'flex-end',
+                padding: '20px',
+                color: 'white',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
+                zIndex: 1,
+                overflow: 'hidden',
+                transition: 'background-image 1s ease-in-out',
+                '&::after': {
+                  content: '""',
                   position: 'absolute',
-                  bottom: '20px',
-                  left: '20px',
-                  zIndex: 3,
-                  color: 'white',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-                }}
-              >
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                  {movies.slice(0, 5)[currentPosterIndex].movieName}
-                </Typography>
-              </Box>
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0))',
+                  zIndex: 2,
+                },
+              }}
+            >
+              <Typography variant="h4" sx={{ fontWeight: 'bold', zIndex: 3 }}>
+                {movies.slice(0, 5)[currentPosterIndex].movieName}
+              </Typography>
             </Box>
           )}
 
@@ -129,10 +121,10 @@ const HomePage = () => {
                       image={movie.moviePosterURL}
                       alt={movie.movieName}
                     />
-                    <Box
+                    {/* <Box
                       sx={{
                         position: 'absolute',
-                        bottom: '1px',
+                        bottom: '1px',  // Adjusted to move the title higher
                         left: 0,
                         width: '100%',
                         padding: '10px',
@@ -144,7 +136,7 @@ const HomePage = () => {
                       <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                         {movie.movieName}
                       </Typography>
-                    </Box>
+                    </Box> */}
                     <Box
                       sx={{
                         position: 'absolute',
@@ -216,10 +208,10 @@ const HomePage = () => {
                         image={movie.moviePosterURL}
                         alt={movie.movieName}
                       />
-                      <Box
+                      {/* <Box
                         sx={{
                           position: 'absolute',
-                          bottom: '1px',
+                          bottom: '1px',  // Adjusted to move the title higher
                           left: 0,
                           width: '100%',
                           padding: '10px',
@@ -231,7 +223,7 @@ const HomePage = () => {
                         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                           {movie.movieName}
                         </Typography>
-                      </Box>
+                      </Box> */}
                       <Box
                         sx={{
                           position: 'absolute',
@@ -245,7 +237,7 @@ const HomePage = () => {
                           opacity: 0,
                           transform: 'translateY(100%)',
                           transition: 'opacity 0.3s, transform 0.3s',
-                          zIndex: 2,
+                          zIndex: 2
                         }}
                         className="card-buttons"
                       >

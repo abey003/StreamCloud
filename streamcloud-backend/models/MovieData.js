@@ -5,12 +5,12 @@ const MovieSchema = mongoose.Schema({
     moviePosterURL: String,
     movieEmbeddedLink: String,
     movieLink: String,
-    movie3DLink: String,  // New field for 3D movie link
-    movie3DEmbeddedLink: String,  // New field for 3D embedded link
+    movie3DLink: String,
+    movie3DEmbeddedLink: String, 
     movieLength: String,
     movieLanguage: String,
     movieReleaseYear: Number,
-    genre: String, // Add genre field if needed
+    genre: String,
     movieUploadedOn: {
         type: Date,
         default: Date.now
