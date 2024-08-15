@@ -91,9 +91,9 @@ app.get('/movies/after/:date', async (req, res) => {
 app.get('/movies/genres', async (req, res) => {
     try {
         const genres = [
-            'action', 'adventure', 'sci-fi', 'comedy', 'horror', 
-            'animation', 'biography', 'documentary', 'romance', 
-            'fantasy', 'thriller', 'crime'
+            'Action', 'Adventure', 'Sci-fi', 'Comedy', 'Horror', 
+            'Animation', 'Biography', 'Documentary', 'Romance', 
+            'Fantasy', 'Thriller', 'Crime'
         ];
 
         const moviesByGenre = {};

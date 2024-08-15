@@ -4,33 +4,33 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-  const [moviesByGenre, setMoviesByGenre] = useState({});
+  const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPosterIndex, setCurrentPosterIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://streamcloud-lt16.onrender.com/movies/genres")
+    axios.get("https://streamcloud-lt16.onrender.com/movies/recent")
       .then((res) => {
-        setMoviesByGenre(res.data);
+        const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
+        setMovies(sortedMovies);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching movies by genres:", error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
   }, []);
 
   useEffect(() => {
-    if (Object.keys(moviesByGenre).length > 0) {
-      const firstGenre = Object.keys(moviesByGenre)[0];
+    if (movies.length > 0) {
       const interval = setInterval(() => {
-        setCurrentPosterIndex((prevIndex) => (prevIndex + 1) % Math.min(moviesByGenre[firstGenre].length, 5));
+        setCurrentPosterIndex((prevIndex) => (prevIndex + 1) % Math.min(movies.length, 5));
       }, 5000); // Change background and title every 5 seconds
 
       return () => clearInterval(interval);
     }
-  }, [moviesByGenre]);
+  }, [movies]);
 
   const watchNow = (movie) => {
     navigate('/watchnow', { state: { movie } });
@@ -40,8 +40,15 @@ const HomePage = () => {
     navigate(`/movies/genre/${genre}`);
   };
 
-  const firstGenre = Object.keys(moviesByGenre).length > 0 ? Object.keys(moviesByGenre)[0] : null;
-  const mostRecentMovies = firstGenre ? moviesByGenre[firstGenre] : [];
+  const mostRecentMovie = movies.length > 0 ? movies[0] : null;
+
+  const moviesByGenre = movies.reduce((acc, movie) => {
+    if (movie.genre) {
+      if (!acc[movie.genre]) acc[movie.genre] = [];
+      acc[movie.genre].push(movie);
+    }
+    return acc;
+  }, {});
 
   return (
     <div>
@@ -51,13 +58,13 @@ const HomePage = () => {
         </Box>
       ) : (
         <>
-          {firstGenre && (
+          {mostRecentMovie && (
             <Box
               sx={{
                 height: '80vh',
                 marginTop: '64px',
                 position: 'relative',
-                backgroundImage: `url(${mostRecentMovies[currentPosterIndex].moviePosterURL})`,
+                backgroundImage: `url(${movies.slice(0, 5)[currentPosterIndex].moviePosterURL})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundAttachment: 'fixed',
@@ -82,10 +89,80 @@ const HomePage = () => {
               }}
             >
               <Typography variant="h4" sx={{ fontWeight: 'bold', zIndex: 3 }}>
-                {mostRecentMovies[currentPosterIndex].movieName}
+                {movies.slice(0, 5)[currentPosterIndex].movieName}
               </Typography>
             </Box>
           )}
+
+          <Box sx={{ padding: '20px', zIndex: 2, position: 'relative', backgroundColor: '#fff' }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
+              Recently Added Movies
+            </Typography>
+            <Grid container spacing={2}>
+              {movies.slice(0, 4).map((movie) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={movie._id}>
+                  <Card
+                    sx={{
+                      maxWidth: 500,
+                      margin: '0 auto',
+                      textAlign: 'left',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      transition: 'transform 0.4s ease, box-shadow 0.4s ease',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                      },
+                      '&:hover .card-buttons': {
+                        opacity: 1,
+                        transform: 'translateY(0)',
+                      },
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="250"
+                      image={movie.moviePosterURL}
+                      alt={movie.movieName}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        padding: '10px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        opacity: 0,
+                        transform: 'translateY(100%)',
+                        transition: 'opacity 0.3s, transform 0.3s',
+                        zIndex: 2,
+                      }}
+                      className="card-buttons"
+                    >
+                      <Button
+                        variant="contained"
+                        sx={{ fontWeight: 'bold', marginRight: '2px' }}
+                        onClick={() => watchNow(movie)}
+                      >
+                        Watch Now
+                      </Button>
+                      <a href={movie.movieLink} target='_blank' rel="noopener noreferrer">
+                        <Button
+                          variant="contained"
+                          sx={{ backgroundColor: 'black', fontWeight: 'bold' }}
+                        >
+                          Download
+                        </Button>
+                      </a>
+                    </Box>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
 
           {Object.keys(moviesByGenre).map((genre) => (
             <Box key={genre} sx={{ padding: '20px', zIndex: 2 }}>
@@ -93,7 +170,7 @@ const HomePage = () => {
                 {genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
               </Typography>
               <Grid container spacing={2}>
-                {moviesByGenre[genre].map((movie) => (
+                {moviesByGenre[genre].slice(0, 4).map((movie) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={movie._id}>
                     <Card
                       sx={{
