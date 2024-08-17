@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, CardMedia, Grid, Typography, CircularProgress, Box } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import DownloadIcon from '@mui/icons-material/Download';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -54,6 +55,11 @@ const HomePage = () => {
   };
 
   const mostRecentMovie = movies.length > 0 ? movies[0] : null;
+
+  const getDownloadLink = (link) => {
+    const fileId = link.match(/\/d\/(.*?)\//)[1];
+    return `https://drive.google.com/uc?export=download&id=${fileId}`;
+  };
 
   return (
     <div>
@@ -154,12 +160,12 @@ const HomePage = () => {
                       >
                         Watch Now
                       </Button>
-                      <a href={movie.movieLink} target='_blank' rel="noopener noreferrer">
+                      <a href={getDownloadLink(movie.movieLink)} target="_blank" rel="noopener noreferrer">
                         <Button
                           variant="contained"
                           sx={{ backgroundColor: 'black', fontWeight: 'bold' }}
                         >
-                          Download
+                          <DownloadIcon />
                         </Button>
                       </a>
                     </Box>
@@ -214,7 +220,7 @@ const HomePage = () => {
                           opacity: 0,
                           transform: 'translateY(100%)',
                           transition: 'opacity 0.3s, transform 0.3s',
-                          zIndex: 2
+                          zIndex: 2,
                         }}
                         className="card-buttons"
                       >
@@ -225,12 +231,12 @@ const HomePage = () => {
                         >
                           Watch Now
                         </Button>
-                        <a href={movie.movieLink} target='_blank' rel="noopener noreferrer">
+                        <a href={getDownloadLink(movie.movieLink)} target="_blank" rel="noopener noreferrer">
                           <Button
                             variant="contained"
                             sx={{ backgroundColor: 'black', fontWeight: 'bold' }}
                           >
-                            Download
+                            <DownloadIcon />
                           </Button>
                         </a>
                       </Box>
