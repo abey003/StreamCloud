@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     service: 'Gmail', // You can use other services
     auth: {
         user: 'movies.cloud.streaming@gmail.com', // Replace with your email
-        pass: 'Saar@2003'    // Replace with your email password
+        pass: 'Saar@2024'    // Replace with your email password
     }
 });
 
