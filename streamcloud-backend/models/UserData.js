@@ -19,12 +19,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6 // Minimum length for password
     },
-    resetToken: {
-        type: String
-    },
-    resetTokenExpiry: {
-        type: Date
-    }
+    resetToken: String,
+    resetTokenExpiry: Date
 }, { timestamps: true }); // Add timestamps for createdAt and updatedAt fields
 
 const User = mongoose.model('User', userSchema);

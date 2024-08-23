@@ -103,7 +103,7 @@ router.post('/forgot-password', async (req, res) => {
         res.json({ message: 'Password reset instructions sent to your email' });
     } catch (error) {
         console.error('Error during password reset request:', error);
-        res.status(500).json({ message: 'Server error during password reset request', error });
+        res.status(500).json({ message: 'Server error during password reset request', error: error.message });
     }
 });
 
