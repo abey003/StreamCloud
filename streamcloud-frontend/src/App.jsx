@@ -1,24 +1,44 @@
-import { useState } from 'react'
-import './App.css'
-import Navbar from './components/Navbar'
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './components/HomePage'
-import WatchNowPage from './components/WatchNowPage'
-import BrowseMoviesPage from './components/BrowseMoviesPage'
+import { useState, useEffect } from 'react';
+import './App.css';
+import Navbar from './components/Navbar';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import WatchNowPage from './components/WatchNowPage';
+import BrowseMoviesPage from './components/BrowseMoviesPage';
+import LoginPage from './components/LoginPage';
+import SignUpPage from './components/SignUpPage';// Import the SignUpPage
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem('isLoggedIn');
+  
+    // Only redirect if the user is not logged in and is not on the login/signup page
+    if (!loggedInStatus && !['/login', '/signup'].includes(window.location.pathname)) {
+      console.log("Redirecting to login page");
+      navigate('/login');
+    } else {
+      // Set the logged-in status based on localStorage
+      setIsLoggedIn(Boolean(loggedInStatus));
+    }
+  }, [navigate]);
+  
+  
 
   return (
     <>
-    <Navbar />
-    <Routes>
-      <Route path='/' element={<HomePage />} />
-      <Route path="/watchnow" element={<WatchNowPage />} />
-      <Route path="/movies/genre/:genre" element={<BrowseMoviesPage />} />
-    </Routes>
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/watchnow" element={<WatchNowPage />} />
+        <Route path="/movies/genre/:genre" element={<BrowseMoviesPage />} />
+        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/signup" element={<SignUpPage />} /> {/* Add signup route */}
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

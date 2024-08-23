@@ -13,7 +13,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent");
+      const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent"); //const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent");
       const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
       setMovies(sortedMovies);
     };

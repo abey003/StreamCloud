@@ -3,15 +3,18 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-// Import the movieModel from MovieData.js
 const movieModel = require('./models/MovieData');
+const authRoutes = require('./routes/auth');  // Import the auth routes
 
 app.use(cors());
 app.use(express.json());
 
 require('./connections/connection');
 
-// Fetch all movies
+// Use auth routes
+app.use('/auth', authRoutes);  // Prefix all auth routes with /auth
+
+// Movie routes
 app.get('/', async (req, res) => {
     try {
         const data = await movieModel.find();
@@ -21,18 +24,16 @@ app.get('/', async (req, res) => {
     }
 });
 
-// Get the top 4 recently added movies
 app.get('/movies/recent', async (req, res) => {
     try {
         const movies = await movieModel.find().sort({ movieUploadedOn: -1 }).limit(4);
         res.json(movies);
     } catch (error) {
-        console.error("Error fetching movies:", error); // Log the error to the console
+        console.error("Error fetching movies:", error);
         res.status(500).json({ message: 'Error fetching movies', error });
     }
 });
 
-// Add a new movie
 app.post('/addmovie', async (req, res) => {
     try {
         const newMovie = new movieModel(req.body);
@@ -43,7 +44,6 @@ app.post('/addmovie', async (req, res) => {
     }
 });
 
-// Delete a movie by ID
 app.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -54,7 +54,6 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// Get a specific movie by ID
 app.get('/movie/:id', async (req, res) => {
     try {
         const movie = await movieModel.findById(req.params.id);
@@ -65,7 +64,6 @@ app.get('/movie/:id', async (req, res) => {
     }
 });
 
-// Update a movie by ID
 app.put('/updatemovie/:id', async (req, res) => {
     try {
         const movie = await movieModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -76,7 +74,6 @@ app.put('/updatemovie/:id', async (req, res) => {
     }
 });
 
-// Filter movies by upload date (on or after a specific date)
 app.get('/movies/after/:date', async (req, res) => {
     try {
         const date = new Date(req.params.date);
@@ -87,7 +84,6 @@ app.get('/movies/after/:date', async (req, res) => {
     }
 });
 
-// Fetch all movies by genre and group them
 app.get('/movies/genres', async (req, res) => {
     try {
         const genres = [
@@ -107,17 +103,17 @@ app.get('/movies/genres', async (req, res) => {
 
         res.json(moviesByGenre);
     } catch (error) {
-        console.error("Error fetching movies by genres:", error); // Log the error to the console
+        console.error("Error fetching movies by genres:", error);
         res.status(500).json({ message: 'Error fetching movies by genres', error });
     }
 });
 
 app.get('/genre/:genre', async (req, res) => {
     try {
-      const movies = await Movie.find({ genre: req.params.genre });
-      res.json(movies);
+        const movies = await Movie.find({ genre: req.params.genre });
+        res.json(movies);
     } catch (error) {
-      res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
