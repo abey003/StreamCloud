@@ -6,7 +6,8 @@ import HomePage from './components/HomePage';
 import WatchNowPage from './components/WatchNowPage';
 import BrowseMoviesPage from './components/BrowseMoviesPage';
 import LoginPage from './components/LoginPage';
-import SignUpPage from './components/SignUpPage';// Import the SignUpPage
+import SignUpPage from './components/SignUpPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage'; // Import the ForgotPasswordPage
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,17 +16,14 @@ function App() {
   useEffect(() => {
     const loggedInStatus = localStorage.getItem('isLoggedIn');
   
-    // Only redirect if the user is not logged in and is not on the login/signup page
-    if (!loggedInStatus && !['/login', '/signup'].includes(window.location.pathname)) {
-      console.log("Redirecting to login page");
+    // Only redirect if the user is not logged in and is not on the login/signup/forgot-password page
+    if (!loggedInStatus && !['/login', '/signup', '/forgot-password'].includes(window.location.pathname)) {
       navigate('/login');
     } else {
       // Set the logged-in status based on localStorage
       setIsLoggedIn(Boolean(loggedInStatus));
     }
   }, [navigate]);
-  
-  
 
   return (
     <>
@@ -35,7 +33,8 @@ function App() {
         <Route path="/watchnow" element={<WatchNowPage />} />
         <Route path="/movies/genre/:genre" element={<BrowseMoviesPage />} />
         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path="/signup" element={<SignUpPage />} /> {/* Add signup route */}
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} /> {/* Add forgot password route */}
       </Routes>
     </>
   );

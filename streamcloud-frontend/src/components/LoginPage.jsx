@@ -104,7 +104,12 @@ const LoginPage = ({ setIsLoggedIn }) => {
                 Login
               </Button>
             </form>
-            <Typography variant="body2" sx={{ mt: 2 }}>
+            <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+              <Link to="/forgot-password" style={{ textDecoration: 'none', color: 'green' }}>
+                Forgot Password?
+              </Link>
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
               Don't have an account?{' '}
               <Link to="/signup" style={{ textDecoration: 'none', color: 'green' }}>
                 Sign up

@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 6 // Minimum length for password
+    },
+    resetToken: {
+        type: String
+    },
+    resetTokenExpiry: {
+        type: Date
     }
 }, { timestamps: true }); // Add timestamps for createdAt and updatedAt fields
 
