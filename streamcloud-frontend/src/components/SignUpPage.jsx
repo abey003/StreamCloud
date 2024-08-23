@@ -9,6 +9,7 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [videoLoaded, setVideoLoaded] = useState(false); // State to track if the video is loaded
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -43,6 +44,7 @@ const SignUpPage = () => {
         muted
         playsInline
         src="./login_signup_bg.mp4"
+        onLoadedData={() => setVideoLoaded(true)} // Set videoLoaded to true when the video is loaded
         style={{
           position: 'absolute',
           top: 0,
@@ -54,82 +56,84 @@ const SignUpPage = () => {
         }}
       />
       {/* Sign Up Box */}
-      <Box
-        sx={{
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      {videoLoaded && ( // Only render the sign-up box when the video is loaded
         <Box
           sx={{
-            background: 'rgba(255, 255, 255, 0.3)', // Glass effect background
-            borderRadius: '10px',
-            padding: '20px',
-            width: '400px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Shadow for depth
-            backdropFilter: 'blur(10px)', // Glass effect blur
-            border: '1px solid rgba(255, 255, 255, 0.2)', // Optional border
-            zIndex: 1, // Ensure it's above the video
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          <Typography variant="h4" sx={{ mb: 2, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>
-            Sign Up
-          </Typography>
-          <form onSubmit={handleSignUp}>
-            <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextField
-              label="Email"
-              type="email"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              label="Password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <TextField
-              label="Confirm Password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {error && (
-              <Typography color="error" sx={{ mb: 2 }}>
-                {error}
-              </Typography>
-            )}
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mb: 2 }}>
+          <Box
+            sx={{
+              background: 'rgba(255, 255, 255, 0.3)', // Glass effect background
+              borderRadius: '10px',
+              padding: '20px',
+              width: '400px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Shadow for depth
+              backdropFilter: 'blur(10px)', // Glass effect blur
+              border: '1px solid rgba(255, 255, 255, 0.2)', // Optional border
+              zIndex: 1, // Ensure it's above the video
+            }}
+          >
+            <Typography variant="h4" sx={{ mb: 2, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>
               Sign Up
-            </Button>
-          </form>
-          <Typography variant="body2" sx={{ mt: 2 }}>
-            Already have an account?{' '}
-            <Link to="/login" style={{ textDecoration: 'none', color: 'green' }}>
-              Login here
-            </Link>
-          </Typography>
+            </Typography>
+            <form onSubmit={handleSignUp}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 2 }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <TextField
+                label="Email"
+                type="email"
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 2 }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 2 }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <TextField
+                label="Confirm Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 2 }}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {error && (
+                <Typography color="error" sx={{ mb: 2 }}>
+                  {error}
+                </Typography>
+              )}
+              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mb: 2 }}>
+                Sign Up
+              </Button>
+            </form>
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Already have an account?{' '}
+              <Link to="/login" style={{ textDecoration: 'none', color: 'green' }}>
+                Login here
+              </Link>
+            </Typography>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };
