@@ -91,10 +91,10 @@ router.post('/forgot-password', async (req, res) => {
         await user.save();
 
         // Send the password reset email
-        const resetUrl = `https://abey-streamcloud.netlify.app/reset-password/${resetToken}`;
+        const resetUrl = `/reset-password/${resetToken}`;
         const mailOptions = {
             to: email,
-            from: 'movies.cloud.streaming@gmail.com',
+            from: '',
             subject: 'Password Reset Request',
             text: `You requested a password reset. Please click on the following link to reset your password: ${resetUrl}`
         };
