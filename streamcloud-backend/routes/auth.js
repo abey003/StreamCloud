@@ -94,7 +94,7 @@ router.post('/forgot-password', async (req, res) => {
         const resetUrl = `http://yourdomain.com/reset-password/${resetToken}`;
         const mailOptions = {
             to: email,
-            from: 'your-email@gmail.com',
+            from: 'movies.cloud.streaming@gmail.com',
             subject: 'Password Reset Request',
             text: `You requested a password reset. Please click on the following link to reset your password: ${resetUrl}`
         };
