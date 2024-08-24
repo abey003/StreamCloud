@@ -12,8 +12,8 @@ const JWT_SECRET = 'your_jwt_secret'; // Use a strong secret in production
 const transporter = nodemailer.createTransport({
     service: 'Gmail', // You can use other services
     auth: {
-        user: 'movies.cloud.streaming@gmail.com', // Replace with your email
-        pass: 'Saar@2024'    // Replace with your email password
+        user: 'Replace with your email', // Replace with your email
+        pass: 'Replace with your email password'    // Replace with your email password
     }
 });
 
