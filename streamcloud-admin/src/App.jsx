@@ -1,0 +1,24 @@
+import { useState } from 'react'
+import './App.css'
+import Navbar from './components/Navbar'
+import { Routes, Route } from 'react-router-dom'
+import HomePage from './components/HomePage'
+import WatchNowPage from './components/WatchNowPage'
+import AddMovies from './components/AddMovies'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+    <Navbar />
+    <Routes>
+      <Route path='/' element={<HomePage />} />
+      <Route path="/watchnow" element={<WatchNowPage />} />
+      <Route path="/addmovie" element={<AddMovies />} />
+    </Routes>
+    </>
+  )
+}
+
+export default App
