@@ -31,10 +31,10 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/watchnow" element={<WatchNowPage />} />
-        <Route path="/movies/genre/:genre" element={<BrowseMoviesPage />} />
         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/watchnow" element={<WatchNowPage />} />
+        <Route path="/movies/genre/:genre" element={<BrowseMoviesPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} /> {/* Add forgot password route */}
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
       </Routes>
