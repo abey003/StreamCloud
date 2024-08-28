@@ -21,7 +21,7 @@ const SignUpPage = () => {
     }
 
     try {
-      const response = await axios.post('https://streamcloud-lt16.onrender.com/auth/signup', { name, email, password });
+      const response = await axios.post('https://streamcloud-vsjc.onrender.com/auth/signup', { name, email, password });
 
       if (response.status === 201) {
         console.log("User signed up successfully:", response.data);

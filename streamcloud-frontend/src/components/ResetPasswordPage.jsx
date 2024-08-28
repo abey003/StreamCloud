@@ -21,7 +21,7 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const response = await axios.post(`https://streamcloud-lt16.onrender.com/auth/reset-password/${token}`, { password });
+      const response = await axios.post(`https://streamcloud-vsjc.onrender.com/auth/reset-password/${token}`, { password });
 
       if (response.status === 200) {
         setMessage('Password has been successfully reset.');

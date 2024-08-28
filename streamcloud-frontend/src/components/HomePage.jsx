@@ -16,7 +16,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent");
+        const res = await axios.get("https://streamcloud-vsjc.onrender.com/movies/recent");
         const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
         setMovies(sortedMovies);
       } catch (err) {
@@ -27,7 +27,7 @@ const HomePage = () => {
 
     const fetchMoviesByGenre = async () => {
       try {
-        const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/genres");
+        const res = await axios.get("https://streamcloud-vsjc.onrender.com/movies/genres");
         setMoviesByGenre(res.data);
       } catch (err) {
         console.error("Error fetching genres:", err);

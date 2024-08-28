@@ -14,7 +14,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://streamcloud-lt16.onrender.com/auth/forgot-password', { email });
+      const response = await axios.post('https://streamcloud-vsjc.onrender.com/auth/forgot-password', { email });
 
       if (response.status === 200) {
         setMessage('Password reset instructions sent to your email.');

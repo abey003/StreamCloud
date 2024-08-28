@@ -16,7 +16,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
     try {
       console.log("Sending login request", { email, password });
   
-      const response = await axios.post('https://streamcloud-lt16.onrender.com/auth/login', { email, password });
+      const response = await axios.post('https://streamcloud-vsjc.onrender.com/auth/login', { email, password });
   
       console.log("Response from server:", response);
   

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Box, Typography, CircularProgress } from '@mui/material';
-import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from 'react-router-dom';
 

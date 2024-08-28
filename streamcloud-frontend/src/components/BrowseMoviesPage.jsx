@@ -13,7 +13,7 @@ const BrowseMoviesPage = () => {
 
   useEffect(() => {
     setLoading(true); // Start loading when API call is made
-    axios.get(`https://streamcloud-lt16.onrender.com/movies/genre/${genre}`)
+    axios.get(`https://streamcloud-vsjc.onrender.com/movies/genre/${genre}`)
       .then((res) => {
         setMovies(res.data);
         setLoading(false); // Stop loading when data is fetched
