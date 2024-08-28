@@ -12,18 +12,18 @@ const LoginPage = ({ setIsLoggedIn }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       console.log("Sending login request", { email, password });
-
+  
       const response = await axios.post('https://streamcloud-lt16.onrender.com/auth/login', { email, password });
-
+  
       console.log("Response from server:", response);
-
+  
       if (response.status === 200 && response.data.success) {
         localStorage.setItem('isLoggedIn', 'true'); // Save as string
         setIsLoggedIn(true);
-        navigate('/');
+        navigate('/', { replace: true }); // Use replace to prevent going back to the login page
       } else {
         setError('Wrong email or password');
       }
