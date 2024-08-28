@@ -3,24 +3,36 @@ import { Button, Card, CardMedia, Grid, Typography, CircularProgress, Box } from
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import DownloadIcon from '@mui/icons-material/Download';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // New error state
   const [currentPosterIndex, setCurrentPosterIndex] = useState(0);
   const [moviesByGenre, setMoviesByGenre] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent"); //const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent");
-      const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
-      setMovies(sortedMovies);
+      try {
+        const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/recent");
+        const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
+        setMovies(sortedMovies);
+      } catch (err) {
+        console.error("Error fetching movies:", err);
+        setError("Error loading movies. Please try again later."); // Set error message
+      }
     };
 
     const fetchMoviesByGenre = async () => {
-      const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/genres");
-      setMoviesByGenre(res.data);
+      try {
+        const res = await axios.get("https://streamcloud-lt16.onrender.com/movies/genres");
+        setMoviesByGenre(res.data);
+      } catch (err) {
+        console.error("Error fetching genres:", err);
+        setError("Error loading genres. Please try again later."); // Set error message
+      }
     };
 
     const fetchData = async () => {
@@ -28,7 +40,6 @@ const HomePage = () => {
         await Promise.all([fetchMovies(), fetchMoviesByGenre()]);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
@@ -66,6 +77,12 @@ const HomePage = () => {
       {loading ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, paddingTop: '64px' }}>
           <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, paddingTop: '64px' }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
+              Error in Loading
+            </Typography>
         </Box>
       ) : (
         <>
@@ -132,7 +149,10 @@ const HomePage = () => {
                   >
                     <CardMedia
                       component="img"
-                      height="250"
+                      sx={{
+                        aspectRatio: '16/9',
+                        objectFit: 'cover',
+                      }}
                       image={movie.moviePosterURL}
                       alt={movie.movieName}
                     />
@@ -177,8 +197,21 @@ const HomePage = () => {
 
           {Object.keys(moviesByGenre).map((genre) => (
             <Box key={genre} sx={{ padding: '20px', zIndex: 2 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px', cursor: 'pointer' }} onClick={() => viewMoviesByGenre(genre)}>
-                {genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  fontWeight: 'bold', 
+                  marginBottom: '20px', 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center'  // Align text and icon vertically
+                }} 
+                onClick={() => viewMoviesByGenre(genre)}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
+                  <ArrowForwardIosIcon sx={{ marginLeft: '4px', fontSize: '1.2rem' }} /> {/* Adjust the margin and size as needed */}
+                </Box>
               </Typography>
               <Grid container spacing={2}>
                 {moviesByGenre[genre].slice(0, 4).map((movie) => (
@@ -203,7 +236,10 @@ const HomePage = () => {
                     >
                       <CardMedia
                         component="img"
-                        height="250"
+                        sx={{
+                          aspectRatio: '16/9',
+                          objectFit: 'cover',
+                        }}
                         image={movie.moviePosterURL}
                         alt={movie.movieName}
                       />

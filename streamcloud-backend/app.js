@@ -108,14 +108,19 @@ app.get('/movies/genres', async (req, res) => {
     }
 });
 
-app.get('/genre/:genre', async (req, res) => {
+app.get('/movies/genre/:genre', async (req, res) => {
     try {
-        const movies = await Movie.find({ genre: req.params.genre });
+        const movies = await movieModel.find({ genre: req.params.genre });
+        if (!movies || movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found for this genre' });
+        }
         res.json(movies);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error("Error fetching movies by genre:", error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
+
 
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);

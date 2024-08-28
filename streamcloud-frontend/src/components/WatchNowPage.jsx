@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Box, Typography, CircularProgress } from '@mui/material';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const WatchNowPage = () => {
@@ -39,13 +40,14 @@ const WatchNowPage = () => {
         >
           {/* Back Button Above Movie Poster */}
           <Button 
-            variant="filled"
-            color='inherit'
-            onClick={handleBackClick} 
-            sx={{ mb: 2, alignSelf: 'flex-start' }} 
+            variant="outlined" 
+            startIcon={<ArrowBackIosNewIcon />} 
+            sx={{ mb: 2, alignSelf: 'flex-start' }}  
+            onClick={() => navigate(-1)}
           >
-            <ArrowBackIosOutlinedIcon />
+            Back
           </Button>
+
 
           {/* Movie Title, Year, Genre */}
           <Box 
