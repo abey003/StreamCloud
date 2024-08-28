@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 
 const LoginPage = ({ setIsLoggedIn }) => {
@@ -12,23 +12,20 @@ const LoginPage = ({ setIsLoggedIn }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
-      console.log("Sending login request", { email, password });
-  
       const response = await axios.post('https://streamcloud-vsjc.onrender.com/auth/login', { email, password });
-  
-      console.log("Response from server:", response);
-  
+
       if (response.status === 200 && response.data.success) {
-        localStorage.setItem('isLoggedIn', 'true'); // Save as string
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userId', response.data.userId); // Ensure correct ID
+        localStorage.setItem('userEmail', email); // Store email
         setIsLoggedIn(true);
-        navigate('/', { replace: true }); // Use replace to prevent going back to the login page
+        navigate('/', { replace: true });
       } else {
         setError('Wrong email or password');
       }
     } catch (err) {
-      console.error("Error logging in:", err);
       setError('Wrong email or password');
     }
   };
@@ -53,6 +50,24 @@ const LoginPage = ({ setIsLoggedIn }) => {
           zIndex: -1,
         }}
       />
+      {/* Loading Indicator */}
+      {!videoLoaded && (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+          }}
+        >
+          <CircularProgress color="primary" />
+        </Box>
+      )}
       {/* Login Form */}
       {videoLoaded && ( // Only render the login box when the video is loaded
         <Box
@@ -104,11 +119,6 @@ const LoginPage = ({ setIsLoggedIn }) => {
                 Login
               </Button>
             </form>
-            {/* <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-              <Link to="/forgot-password" style={{ textDecoration: 'none', color: 'green' }}>
-                Forgot Password?
-              </Link>
-            </Typography> */}
             <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
               Don't have an account?{' '}
               <Link to="/signup" style={{ textDecoration: 'none', color: 'green' }}>

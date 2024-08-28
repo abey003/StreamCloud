@@ -6,22 +6,25 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 3,
         maxlength: 50,
-        match: /^[A-Za-z][A-Za-z\s]*$/ // Name should start with an alphabet and only contain alphabets and spaces
+        match: /^[A-Za-z][A-Za-z\s]*$/
     },
     email: {
         type: String,
         required: true,
-        unique: true, // Email should remain unique
-        match: /.+\@.+\..+/ // Basic email validation
+        unique: true,
+        match: /.+\@.+\..+/
     },
     password: {
         type: String,
         required: true,
-        minlength: 6 // Minimum length for password
+        minlength: 6
+    },
+    profilePhoto: {
+        type: String, // Store Base64 string
     },
     resetToken: String,
     resetTokenExpiry: Date
-}, { timestamps: true }); // Add timestamps for createdAt and updatedAt fields
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 

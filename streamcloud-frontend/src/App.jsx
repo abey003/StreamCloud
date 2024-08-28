@@ -9,6 +9,7 @@ import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage'; // Import the ForgotPasswordPage
 import ResetPasswordPage from './components/ResetPasswordPage'
+import AccountPage from './components/AccountPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,6 +38,7 @@ function App() {
         <Route path="/movies/genre/:genre" element={<BrowseMoviesPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} /> {/* Add forgot password route */}
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
     </>
   );
