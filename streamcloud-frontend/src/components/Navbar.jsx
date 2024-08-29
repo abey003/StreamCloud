@@ -120,8 +120,10 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
 
   const handleMovieClick = (movie) => {
     navigate('/watchnow', { state: { movie } });
-    setSearchTerm(''); // Clear search term after navigating
-    setSearchResults([]); // Clear search results after navigating
+    setTimeout(() => {
+      setSearchTerm('');
+      setSearchResults([]);
+    }, 0); // Delay of 0ms to ensure it's executed after the navigation
   };
 
   const handleAccount = () => {

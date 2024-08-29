@@ -15,6 +15,7 @@ const AccountPage = () => {
   const [editingEmail, setEditingEmail] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [profilePhotoFile, setProfilePhotoFile] = useState(null); // State for the selected file
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState(''); // State for the profile photo URL
   const navigate = useNavigate();
   const userEmail = localStorage.getItem('userEmail');
 
@@ -36,6 +37,7 @@ const AccountPage = () => {
         const response = await axios.get(`https://streamcloud-vsjc.onrender.com/auth/account/email/${userEmail}`);
         setUserData(response.data);
         setOriginalData(response.data);
+        setProfilePhotoUrl(response.data.profilePhoto); // Set initial profile photo URL
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -57,6 +59,7 @@ const AccountPage = () => {
     const file = e.target.files[0];
     if (file) {
       setProfilePhotoFile(file);
+      setProfilePhotoUrl(URL.createObjectURL(file)); // Create URL for the selected file
       setHasChanges(true);
     }
   };
@@ -146,7 +149,7 @@ const AccountPage = () => {
             <label htmlFor="profile-photo-upload">
               <IconButton component="span">
                 <Avatar
-                  src={userData.profilePhoto}
+                  src={profilePhotoUrl || userData.profilePhoto} // Use the URL from state or fallback to original
                   alt="Profile Photo"
                   sx={{ width: 100, height: 100, margin: 'auto' }}
                 />
