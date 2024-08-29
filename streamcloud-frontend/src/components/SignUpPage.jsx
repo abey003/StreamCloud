@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, Button, TextField, Typography, Avatar, IconButton } from '@mui/material';
+import { Box, Button, TextField, Typography, Avatar, IconButton, CircularProgress } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -31,7 +31,7 @@ const SignUpPage = () => {
         formData.append('profilePhoto', profilePhoto); // Append profile photo
       }
 
-      const response = await axios.post('http://localhost:3000/auth/signup', formData, {
+      const response = await axios.post('https://streamcloud-vsjc.onrender.com/auth/signup', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -72,6 +72,18 @@ const SignUpPage = () => {
           zIndex: -1,
         }}
       />
+      {!videoLoaded && (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
       {videoLoaded && (
         <Box
           sx={{

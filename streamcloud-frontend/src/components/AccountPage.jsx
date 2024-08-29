@@ -33,7 +33,7 @@ const AccountPage = () => {
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/auth/account/email/${userEmail}`);
+        const response = await axios.get(`https://streamcloud-vsjc.onrender.com/auth/account/email/${userEmail}`);
         setUserData(response.data);
         setOriginalData(response.data);
         setLoading(false);
@@ -81,7 +81,7 @@ const AccountPage = () => {
       });
 
       if (updatedData.password) {
-        updatedData.password = await axios.post(`http://localhost:3000/auth/encrypt-password`, { password: updatedData.password });
+        updatedData.password = await axios.post(`https://streamcloud-vsjc.onrender.com/auth/encrypt-password`, { password: updatedData.password });
       }
 
       // Handle profile photo update
@@ -92,14 +92,14 @@ const AccountPage = () => {
         formData.append('email', userData.email);
         formData.append('password', userData.password);
 
-        await axios.put(`http://localhost:3000/auth/account/email/${userEmail}`, formData, {
+        await axios.put(`https://streamcloud-vsjc.onrender.com/auth/account/email/${userEmail}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
         setSuccess('Profile updated successfully');
       } else {
-        await axios.put(`http://localhost:3000/auth/account/email/${userEmail}`, updatedData);
+        await axios.put(`https://streamcloud-vsjc.onrender.com/auth/account/email/${userEmail}`, updatedData);
         setSuccess('Profile updated successfully');
       }
 
