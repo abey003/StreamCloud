@@ -97,6 +97,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
                 label="Email"
                 variant="outlined"
                 fullWidth
+                required
                 sx={{ mb: 2 }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -106,6 +107,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
                 type="password"
                 variant="outlined"
                 fullWidth
+                required
                 sx={{ mb: 2 }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
