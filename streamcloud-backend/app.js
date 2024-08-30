@@ -4,15 +4,15 @@ const app = express();
 const PORT = 3000;
 
 const movieModel = require('./models/MovieData');
-const KidsShow = require('./models/KidsShowData');
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth');  // Import the auth routes
 
 app.use(cors());
 app.use(express.json());
 
 require('./connections/connection');
 
-app.use('/auth', authRoutes);
+// Use auth routes
+app.use('/auth', authRoutes);  // Prefix all auth routes with /auth
 
 // Movie routes
 app.get('/', async (req, res) => {
@@ -74,6 +74,53 @@ app.put('/updatemovie/:id', async (req, res) => {
     }
 });
 
+app.get('/movies/after/:date', async (req, res) => {
+    try {
+        const date = new Date(req.params.date);
+        const movies = await movieModel.find({ movieUploadedOn: { $gte: date } });
+        res.json(movies);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+app.get('/movies/genres', async (req, res) => {
+    try {
+        const genres = [
+            'Action', 'Adventure', 'Sci-fi', 'Comedy', 'Horror', 
+            'Animation', 'Biography', 'Documentary', 'Romance', 
+            'Fantasy', 'Thriller', 'Crime'
+        ];
+
+        const moviesByGenre = {};
+
+        for (const genre of genres) {
+            const movies = await movieModel.find({ genre }).sort({ movieUploadedOn: -1 }).limit(4);
+            if (movies.length > 0) {
+                moviesByGenre[genre] = movies;
+            }
+        }
+
+        res.json(moviesByGenre);
+    } catch (error) {
+        console.error("Error fetching movies by genres:", error);
+        res.status(500).json({ message: 'Error fetching movies by genres', error });
+    }
+});
+
+app.get('/movies/genre/:genre', async (req, res) => {
+    try {
+        const movies = await movieModel.find({ genre: req.params.genre });
+        if (!movies || movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found for this genre' });
+        }
+        res.json(movies);
+    } catch (error) {
+        console.error("Error fetching movies by genre:", error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 // Kids show routes
 app.post('/addKidsShow', async (req, res) => {
     try {
@@ -110,6 +157,7 @@ app.get('/kidsShows', async (req, res) => {
     }
 });
 
+
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log("Server is running on port", PORT);
 });

@@ -131,6 +131,10 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
     handleClose(); // Close the menu
   };
 
+  const handleKidsClick = () => {
+    navigate('/kids');
+  };
+
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -147,6 +151,9 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                     Home
                   </Button>
                 </Link>
+                <Button variant="outlined" sx={{ fontWeight: 'bold', marginRight: '3px', color: 'white' }} onClick={handleKidsClick}>
+                  Kids
+                </Button>
                 <Search sx={{ marginRight: '20px' }}>
                   <SearchIconWrapper>
                     <SearchIcon />
