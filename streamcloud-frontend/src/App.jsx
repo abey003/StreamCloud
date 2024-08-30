@@ -10,6 +10,7 @@ import SignUpPage from './components/SignUpPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
 import AccountPage from './components/AccountPage';
+import KidsPage from './components/KidsPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +45,7 @@ function App() {
         <Route path="/forgot-password" element={!isLoggedIn ? <ForgotPasswordPage /> : <Navigate to="/" />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/kids" element={<KidsPage />} />
       </Routes>
     </>
   );

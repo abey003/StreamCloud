@@ -151,9 +151,11 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
                     Home
                   </Button>
                 </Link>
-                <Button variant="outlined" sx={{ fontWeight: 'bold', marginRight: '3px', color: 'white' }} onClick={handleKidsClick}>
-                  Kids
-                </Button>
+                <Link to='/kids'>
+                  <Button variant="outlined" sx={{ fontWeight: 'bold', marginRight: '3px', color: 'white' }} onClick={handleKidsClick}>
+                    Kids
+                  </Button>
+                </Link>
                 <Search sx={{ marginRight: '20px' }}>
                   <SearchIconWrapper>
                     <SearchIcon />
