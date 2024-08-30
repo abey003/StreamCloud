@@ -13,6 +13,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { styled, alpha } from '@mui/material/styles';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -148,7 +149,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
               <>
                 <Link to='/'>
                   <Button variant="outlined" sx={{ fontWeight: 'bold', marginRight: '3px', color: 'white' }}>
-                    Home
+                    <HomeOutlinedIcon />
                   </Button>
                 </Link>
                 <Link to='/kids'>
