@@ -9,7 +9,7 @@ const KidsPage = () => {
   useEffect(() => {
     const fetchKidsShows = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/kids');
+        const response = await axios.get('https://streamcloud-vsjc.onrender.com/kids');
 
         if (response.data.message === "No Shows Available") {
           setKidsShows([]);
