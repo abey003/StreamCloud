@@ -40,7 +40,7 @@ const AddMovies = () => {
         await axios.put(`http://localhost:3000/updatemovie/${movie._id}`, movie);
         alert('Movie updated successfully!');
       } else {
-        await axios.post('http://localhost:3000/addmovie', movie);
+        await axios.post('http://localhost:3000/movie/addmovies', movie);
         alert('Movie added successfully!');
       }
       navigate('/');

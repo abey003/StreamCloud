@@ -28,7 +28,7 @@ const KidsPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '60px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
         <CircularProgress />
       </Box>
     );

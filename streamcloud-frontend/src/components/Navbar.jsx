@@ -81,7 +81,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch('https://streamcloud-vsjc.onrender.com/');
+        const response = await fetch('https://streamcloud-vsjc.onrender.com/movies');
         const data = await response.json();
         setMovies(data);
       } catch (error) {

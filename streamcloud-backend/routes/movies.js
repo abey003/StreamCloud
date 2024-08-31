@@ -1,7 +1,6 @@
 // routes/movies.js
 const express = require('express');
 const router = express.Router();
-
 const movieModel = require('../models/MovieData');
 
 // Get all movies
@@ -25,8 +24,47 @@ router.get('/recent', async (req, res) => {
     }
 });
 
+// Get movies by genres
+router.get('/genres', async (req, res) => {
+    try {
+        const genres = [
+            'Action', 'Adventure', 'Sci-fi', 'Comedy', 'Horror', 
+            'Animation', 'Biography', 'Documentary', 'Romance', 
+            'Fantasy', 'Thriller', 'Crime'
+        ];
+
+        const moviesByGenre = {};
+
+        for (const genre of genres) {
+            const movies = await movieModel.find({ genre }).sort({ movieUploadedOn: -1 }).limit(4);
+            if (movies.length > 0) {
+                moviesByGenre[genre] = movies;
+            }
+        }
+
+        res.json(moviesByGenre);
+    } catch (error) {
+        console.error("Error fetching movies by genres:", error);
+        res.status(500).json({ message: 'Error fetching movies by genres', error });
+    }
+});
+
+// Get movies by a specific genre
+router.get('/genre/:genre', async (req, res) => {
+    try {
+        const movies = await movieModel.find({ genre: req.params.genre });
+        if (!movies || movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found for this genre' });
+        }
+        res.json(movies);
+    } catch (error) {
+        console.error("Error fetching movies by genre:", error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 // Add a new movie
-router.post('/', async (req, res) => { // Changed from /addmovie to /
+router.post('/addmovies', async (req, res) => { // Changed from /addmovie to /
     try {
         const newMovie = new movieModel(req.body);
         await newMovie.save();
@@ -77,45 +115,6 @@ router.get('/after/:date', async (req, res) => {
         res.json(movies);
     } catch (err) {
         res.status(500).json({ message: err.message });
-    }
-});
-
-// Get movies by genres
-router.get('/genres', async (req, res) => {
-    try {
-        const genres = [
-            'Action', 'Adventure', 'Sci-fi', 'Comedy', 'Horror', 
-            'Animation', 'Biography', 'Documentary', 'Romance', 
-            'Fantasy', 'Thriller', 'Crime'
-        ];
-
-        const moviesByGenre = {};
-
-        for (const genre of genres) {
-            const movies = await movieModel.find({ genre }).sort({ movieUploadedOn: -1 }).limit(4);
-            if (movies.length > 0) {
-                moviesByGenre[genre] = movies;
-            }
-        }
-
-        res.json(moviesByGenre);
-    } catch (error) {
-        console.error("Error fetching movies by genres:", error);
-        res.status(500).json({ message: 'Error fetching movies by genres', error });
-    }
-});
-
-// Get movies by a specific genre
-router.get('/genre/:genre', async (req, res) => {
-    try {
-        const movies = await movieModel.find({ genre: req.params.genre });
-        if (!movies || movies.length === 0) {
-            return res.status(404).json({ message: 'No movies found for this genre' });
-        }
-        res.json(movies);
-    } catch (error) {
-        console.error("Error fetching movies by genre:", error);
-        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 

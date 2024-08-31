@@ -22,14 +22,17 @@ const SignUpPage = () => {
       return;
     }
 
+    if (!profilePhoto) {
+      setError("Profile photo is required");
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append('name', name);
       formData.append('email', email);
       formData.append('password', password);
-      if (profilePhoto) {
-        formData.append('profilePhoto', profilePhoto); // Append profile photo
-      }
+      formData.append('profilePhoto', profilePhoto); // Append profile photo
 
       const response = await axios.post('https://streamcloud-vsjc.onrender.com/auth/signup', formData, {
         headers: {
@@ -133,6 +136,7 @@ const SignUpPage = () => {
                 label="Name"
                 variant="outlined"
                 fullWidth
+                required
                 sx={{ mb: 2 }}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -142,6 +146,7 @@ const SignUpPage = () => {
                 type="email"
                 variant="outlined"
                 fullWidth
+                required
                 sx={{ mb: 2 }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -151,6 +156,7 @@ const SignUpPage = () => {
                 type="password"
                 variant="outlined"
                 fullWidth
+                required
                 sx={{ mb: 2 }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -160,6 +166,7 @@ const SignUpPage = () => {
                 type="password"
                 variant="outlined"
                 fullWidth
+                required
                 sx={{ mb: 2 }}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
