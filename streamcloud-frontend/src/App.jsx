@@ -11,6 +11,7 @@ import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
 import AccountPage from './components/AccountPage';
 import KidsPage from './components/KidsPage';
+import KidsWatchPage from './components/KidsWatchPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,6 +47,7 @@ function App() {
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/kids" element={<KidsPage />} />
+        <Route path="/kidswatch" element={<KidsWatchPage />} />
       </Routes>
     </>
   );
