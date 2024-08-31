@@ -47,10 +47,10 @@ const AddKidsShow = () => {
 
     try {
       if (kidsShow._id) {
-        await axios.put(`http://localhost:3000/updateKidsShow/${kidsShow._id}`, updatedKidsShow);
+        await axios.put(`http://localhost:3000/kids//update/${kidsShow._id}`, updatedKidsShow);
         alert('Kids Show updated successfully!');
       } else {
-        await axios.post('http://localhost:3000/addKidsShow', updatedKidsShow);
+        await axios.post('http://localhost:3000/kids/add', updatedKidsShow);
         alert('Kids Show added successfully!');
       }
       navigate('/');

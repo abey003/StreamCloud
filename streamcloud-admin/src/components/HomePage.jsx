@@ -17,7 +17,7 @@ const HomePage = () => {
 
   useEffect(() => {
     // Fetch movies
-    axios.get("http://localhost:3000/")
+    axios.get("http://localhost:3000/movies")
       .then((res) => {
         if (Array.isArray(res.data)) {
           setMovies(res.data);
@@ -33,7 +33,7 @@ const HomePage = () => {
       });
 
     // Fetch kids shows
-    axios.get("http://localhost:3000/kidsShows")
+    axios.get("http://localhost:3000/kids")
       .then((res) => {
         if (Array.isArray(res.data)) {
           setKidsShows(res.data);
