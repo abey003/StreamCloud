@@ -7,10 +7,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
-  const [loadingMovies, setLoadingMovies] = useState(true);
-  const [loadingGenres, setLoadingGenres] = useState(true);
-  const [errorMovies, setErrorMovies] = useState(null);
-  const [errorGenres, setErrorGenres] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPosterIndex, setCurrentPosterIndex] = useState(0);
   const [moviesByGenre, setMoviesByGenre] = useState({});
   const navigate = useNavigate();
@@ -22,9 +20,7 @@ const HomePage = () => {
         const sortedMovies = res.data.sort((a, b) => new Date(b.movieUploadedOn) - new Date(a.movieUploadedOn));
         setMovies(sortedMovies);
       } catch (err) {
-        setErrorMovies("Error loading movies. Please try again later.");
-      } finally {
-        setLoadingMovies(false);
+        setError("Error loading movies. Please try again later.");
       }
     };
 
@@ -33,14 +29,21 @@ const HomePage = () => {
         const res = await axios.get("https://streamcloud-vsjc.onrender.com/movies/genres");
         setMoviesByGenre(res.data);
       } catch (err) {
-        setErrorGenres("Error loading genres. Please try again later.");
-      } finally {
-        setLoadingGenres(false);
+        console.log(res)
+        setError("Error loading genres. Please try again later.");
       }
     };
 
-    fetchMovies();
-    fetchMoviesByGenre();
+    const fetchData = async () => {
+      try {
+        await Promise.all([fetchMovies(), fetchMoviesByGenre()]);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -68,14 +71,14 @@ const HomePage = () => {
 
   return (
     <div>
-      {loadingMovies ? (
+      {loading ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, paddingTop: '64px' }}>
           <CircularProgress />
         </Box>
-      ) : errorMovies ? (
+      ) : error ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, paddingTop: '64px' }}>
           <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-            {errorMovies}
+            Error in Loading
           </Typography>
         </Box>
       ) : (
@@ -189,103 +192,93 @@ const HomePage = () => {
             </Grid>
           </Box>
 
-          {!loadingGenres && !errorGenres && Object.keys(moviesByGenre).length > 0 && (
-            Object.keys(moviesByGenre).map((genre) => (
-              <Box key={genre} sx={{ padding: '20px', zIndex: 2 }}>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontWeight: 'bold',
-                    marginBottom: '20px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                  onClick={() => viewMoviesByGenre(genre)}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
-                    <ArrowForwardIosIcon sx={{ marginLeft: '4px', fontSize: '1.2rem' }} />
-                  </Box>
-                </Typography>
-                <Grid container spacing={2}>
-                  {moviesByGenre[genre].slice(0, 4).map((movie) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={movie._id}>
-                      <Card
+          {Object.keys(moviesByGenre).map((genre) => (
+            <Box key={genre} sx={{ padding: '20px', zIndex: 2 }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 'bold',
+                  marginBottom: '20px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onClick={() => viewMoviesByGenre(genre)}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
+                  <ArrowForwardIosIcon sx={{ marginLeft: '4px', fontSize: '1.2rem' }} />
+                </Box>
+              </Typography>
+              <Grid container spacing={2}>
+                {moviesByGenre[genre].slice(0, 4).map((movie) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={movie._id}>
+                    <Card
+                      sx={{
+                        maxWidth: 500,
+                        margin: '0 auto',
+                        textAlign: 'left',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'transform 0.4s ease, box-shadow 0.4s ease',
+                        '&:hover': {
+                          transform: 'scale(1.05)',
+                          boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                        },
+                        '&:hover .card-buttons': {
+                          opacity: 1,
+                          transform: 'translateY(0)',
+                        },
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
                         sx={{
-                          maxWidth: 500,
-                          margin: '0 auto',
-                          textAlign: 'left',
-                          position: 'relative',
-                          overflow: 'hidden',
-                          transition: 'transform 0.4s ease, box-shadow 0.4s ease',
-                          '&:hover': {
-                            transform: 'scale(1.05)',
-                            boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                          },
-                          '&:hover .card-buttons': {
-                            opacity: 1,
-                            transform: 'translateY(0)',
-                          },
+                          aspectRatio: '16/9',
+                          objectFit: 'cover',
                         }}
+                        image={movie.moviePosterURL}
+                        alt={movie.movieName}
+                      />
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          width: '100%',
+                          padding: '10px',
+                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          opacity: 0,
+                          transform: 'translateY(100%)',
+                          transition: 'opacity 0.3s, transform 0.3s',
+                          zIndex: 2,
+                        }}
+                        className="card-buttons"
                       >
-                        <CardMedia
-                          component="img"
-                          sx={{
-                            aspectRatio: '16/9',
-                            objectFit: 'cover',
-                          }}
-                          image={movie.moviePosterURL}
-                          alt={movie.movieName}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            width: '100%',
-                            padding: '10px',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            opacity: 0,
-                            transform: 'translateY(100%)',
-                            transition: 'opacity 0.3s, transform 0.3s',
-                            zIndex: 2,
-                          }}
-                          className="card-buttons"
+                        <Button
+                          variant="contained"
+                          sx={{ fontWeight: 'bold', marginRight: '2px' }}
+                          onClick={() => watchNow(movie)}
                         >
+                          Watch Now
+                        </Button>
+                        <a href={getDownloadLink(movie.movieLink)} target="_blank" rel="noopener noreferrer">
                           <Button
                             variant="contained"
-                            sx={{ fontWeight: 'bold', marginRight: '2px' }}
-                            onClick={() => watchNow(movie)}
+                            sx={{ backgroundColor: 'black', fontWeight: 'bold' }}
                           >
-                            Watch Now
+                            <DownloadIcon />
                           </Button>
-                          <a href={getDownloadLink(movie.movieLink)} target="_blank" rel="noopener noreferrer">
-                            <Button
-                              variant="contained"
-                              sx={{ backgroundColor: 'black', fontWeight: 'bold' }}
-                            >
-                              <DownloadIcon />
-                            </Button>
-                          </a>
-                        </Box>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            ))
-          )}
-
-          {!loadingGenres && errorGenres && (
-            <Box sx={{ padding: '20px', zIndex: 2 }}>
-              <Typography variant="h6" sx={{ color: 'red' }}>
-                {errorGenres}
-              </Typography>
+                        </a>
+                      </Box>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
             </Box>
-          )}
+          ))}
         </>
       )}
     </div>
