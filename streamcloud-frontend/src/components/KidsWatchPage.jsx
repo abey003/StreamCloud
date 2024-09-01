@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Card, CardMedia, Grid, IconButton } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ReactPlayer from 'react-player';
 
 const KidsWatchPage = () => {
   const location = useLocation();
@@ -83,20 +84,17 @@ const KidsWatchPage = () => {
               paddingTop: '42.1875%', // Aspect ratio for 75% width and 16:9 height
             }}
           >
-            <iframe
-              src={`https://www.youtube.com/embed/${selectedEpisode.link.split('/').pop()}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+            <ReactPlayer
+              url={`https://www.youtube.com/watch?v=${selectedEpisode.link.split('v=')[1]}`}
+              width="100%"
+              height="100%"
+              controls
               style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                width: '100%',
-                height: '100%',
-                border: 'none',
               }}
-            ></iframe>
+            />
           </Box>
         </Box>
       )}

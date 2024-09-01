@@ -39,6 +39,7 @@ router.post('/signup', upload.single('profilePhoto'), async (req, res) => {
 
         if (req.file) {
             // Convert image file to Base64 string
+            console.log("Profile photo received:", req.file);
             profilePhotoBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
         }
 
